@@ -211,3 +211,7 @@ vectorstore/
 logs/
 *.png
 TSAIvenv/
+TSAIvenv/
+vectorstore/
+logs/
+*.png
