@@ -5,7 +5,8 @@ from langgraph.checkpoint.memory import MemorySaver
 from dotenv import load_dotenv
 from langchain.messages import ToolMessage 
 from typing import Literal
-from tools import search_cisco_docs, search_cisco_vuln, search_web
+from tools import search_cisco_vuln, search_web
+from sub_agents import run_bgp_agent, run_upgrade_agent
 import os
 
 #Loading my keys
@@ -27,15 +28,16 @@ and general network problems. Be precise, technical, and provide step-by-step gu
 
 IMPORTANT - You have access to the following tools and MUST use the tools when the query asks something related 
 to the tools:
-- search_cisco_docs: Use for questions about BGP, upgrades, or Cisco device configuration
+- run_bgp_agent: Use for questions about BGP, BGP down, issues with BGP flapping or other related issues to BGP
 - search_web: Use for recent information not covered by the docs
 - search_cisco_vuln: Use for questions about CVEs or security vulnerabilities
+- run_upgrade_agent: Use for questions and information required about Catalyst 8200 and 8300 (C8200/8300) CISCO devices upgrades.
 
 Always prefer using tools when the question is related to their scope.
 If no tool is relevant, answer from your knowledge."""
 
 #tools
-tools = [search_web, search_cisco_docs, search_cisco_vuln]
+tools = [search_web, run_upgrade_agent, run_bgp_agent, search_cisco_vuln]
 model_with_tools = model.bind_tools(tools)
 tools_by_name = {tool.name: tool for tool in tools}
 
@@ -57,7 +59,7 @@ def tool_node(state: MessagesState) -> dict:
         tool = tools_by_name[tool_call["name"]]
         observation = tool.invoke(tool_call["args"])
         result.append(ToolMessage(content=observation, tool_call_id=tool_call["id"]))
-        return {"messages": result}
+    return {"messages": result}
 
 #router edge -- ReAct
 def router_edge(state: MessagesState) -> Literal["tool_node", END]:
@@ -91,7 +93,14 @@ with open("graph.png", "wb") as f:
 def chat(message: str, thread_id: str):
     config = {"configurable":{"thread_id":thread_id}}
     response = agent.invoke({"messages":[HumanMessage(content=message)]}, config=config)
-    print(response["messages"][-1])
+    print(response["messages"][-1].content)
 
 if __name__ == "__main__":
-    chat("My BGP is down", "test_thread5")
+    thread_id = "thread_15"
+    while True:
+        message = input("You: ")
+        
+        if message.lower() in ["exit", "quit"]:
+            break
+        
+        chat(message, thread_id)

@@ -11,6 +11,7 @@ load_dotenv(".env")
 DOCS_PATH = "docs"
 VECTORSTORE_PATH = "vectorstore"
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+_retriever = None
 
 def load_pdfs():
     docs = []
@@ -49,14 +50,21 @@ def load_vectorstore():
     return vectorstore
 
 def get_retriever():
+    global _retriever 
+    if _retriever is not None:
+        return _retriever 
+    
     if not os.path.exists(VECTORSTORE_PATH):
        docs = load_pdfs()
        chunks = chunk_docs(docs)
        build_vectorstore(chunks)
     
     vectorstore = load_vectorstore()
-
-    return vectorstore.as_retriever(search_type="mmr", search_kwargs={"k":5})
+    _retriever = vectorstore.as_retriever(
+        search_type="mmr", 
+        search_kwargs={"k": 5})
+    
+    return _retriever
 
 
 if __name__ == "__main__":
