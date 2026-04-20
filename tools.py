@@ -8,11 +8,11 @@ import requests, os
 @tool
 def search_cisco_docs(query: str):
     """
-    Use this tool to search Cisco documentation and internal PDFs for troubleshooting information.
+    You must this tool to search Cisco documentation and internal PDFs for troubleshooting information.
 
-    Use it when the user asks about:
+    MANDATORY: Use it when the user asks about:
     - BGP issues (neighbor down, flapping, etc.)
-    - Cisco router configuration for software upgredes (C8200, C8300, etc.)
+    - Cisco router configuration for software upgrades (C8200, C8300, etc.)
     - Software upgrades or compatibility
 
     Input: a natural language query
@@ -46,7 +46,7 @@ def search_cisco_docs(query: str):
 @tool
 def search_web(query: str):
     """
-    Use this tool to search the web for recent or external information.
+    You must use this tool to search the web for recent or external information.
 
     Use it when:
     - The question involves recent events or updates
@@ -64,8 +64,11 @@ def search_web(query: str):
 @tool
 def search_cisco_vuln(cve_id: str):
     """Search for Cisco security vulnerabilities and advisories by CVE ID.
-    Use this tool when the user asks about a specific CVE, security vulnerability,
+    MANDATORY: Use this tool when the user asks about a specific CVE, security vulnerability,
     or wants to know if a Cisco device is affected by a known security issue.
+
+    Args:
+        cve_id: The identifier of the vulnerability
     """
 
     token_url = "https://id.cisco.com/oauth2/default/v1/token"
