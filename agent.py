@@ -7,7 +7,8 @@ from langchain.messages import ToolMessage
 from typing import Literal
 from tools import search_cisco_vuln, search_web
 from sub_agents import run_bgp_agent, run_upgrade_agent
-import os
+from langgraph.checkpoint.sqlite import SqliteSaver
+import os, sqlite3
 
 #Loading my keys
 load_dotenv(".env")
@@ -30,7 +31,7 @@ IMPORTANT - You have access to the following tools and MUST use the tools when t
 to the tools:
 - run_bgp_agent: Use for questions about BGP, BGP down, issues with BGP flapping or other related issues to BGP
 - search_web: Use for recent information not covered by the docs
-- search_cisco_vuln: Use for questions about CVEs or security vulnerabilities
+- search_cisco_vuln: Use for questions about CISCO CVEs or security vulnerabilities
 - run_upgrade_agent: Use for questions and information required about Catalyst 8200 and 8300 (C8200/8300) CISCO devices upgrades.
 
 Always prefer using tools when the question is related to their scope.
@@ -84,7 +85,8 @@ agent_builder.add_conditional_edges(
 )
 agent_builder.add_edge("tool_node", "llm_node")
 
-memory = MemorySaver()
+conn = sqlite3.connect("agent_memory.db", check_same_thread=False)
+memory = SqliteSaver(conn)
 agent = agent_builder.compile(checkpointer=memory)
 
 with open("graph.png", "wb") as f:
@@ -96,7 +98,7 @@ def chat(message: str, thread_id: str):
     print(response["messages"][-1].content)
 
 if __name__ == "__main__":
-    thread_id = "thread_15"
+    thread_id = "thread_17"
     while True:
         message = input("You: ")
         

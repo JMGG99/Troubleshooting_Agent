@@ -215,3 +215,4 @@ TSAIvenv/
 vectorstore/
 logs/
 *.png
+agent_memory.db

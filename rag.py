@@ -12,6 +12,7 @@ DOCS_PATH = "docs"
 VECTORSTORE_PATH = "vectorstore"
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 _retriever = None
+embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
 
 def load_pdfs():
     docs = []
@@ -36,7 +37,6 @@ def chunk_docs(docs):
     return chunks
 
 def build_vectorstore(chunks):
-    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
     vectorstore = FAISS.from_documents(
         documents=chunks,
         embedding=embeddings
@@ -45,7 +45,6 @@ def build_vectorstore(chunks):
     return vectorstore
 
 def load_vectorstore():
-    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
     vectorstore = FAISS.load_local(folder_path=VECTORSTORE_PATH, embeddings=embeddings, allow_dangerous_deserialization=True)
     return vectorstore
 
@@ -62,7 +61,7 @@ def get_retriever():
     vectorstore = load_vectorstore()
     _retriever = vectorstore.as_retriever(
         search_type="mmr", 
-        search_kwargs={"k": 5})
+        search_kwargs={"k": 3})
     
     return _retriever
 
