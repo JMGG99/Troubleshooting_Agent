@@ -95,10 +95,13 @@ with open("graph.png", "wb") as f:
 def chat(message: str, thread_id: str):
     config = {"configurable":{"thread_id":thread_id}}
     response = agent.invoke({"messages":[HumanMessage(content=message)]}, config=config)
-    print(response["messages"][-1].content)
+    return({
+        "diagnosis":response["messages"][-1].content,
+        "session_id":thread_id
+    })
 
 if __name__ == "__main__":
-    thread_id = "thread_17"
+    thread_id = "tools_test"
     while True:
         message = input("You: ")
         
