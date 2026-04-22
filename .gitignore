@@ -216,3 +216,6 @@ vectorstore/
 logs/
 *.png
 agent_memory.db
+*.db
+*.db-shm
+*.db-wal
