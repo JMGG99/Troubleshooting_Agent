@@ -6,11 +6,11 @@ An AI assistant that helps diagnose Cisco networking issues, retrieve relevant d
 
 ```text
 User → FastAPI → Agent (LangGraph + Claude)
-                 ├── BGP Subagent
-                 ├── Upgrade Subagent  
+                 ├── BGP Subagent (With cisco docs)
+                 ├── Upgrade Subagent  (Specialized on C8200 and C8300 devices)
                  ├── RAG (Cisco PDFs)
                  ├── Web Search
-                 └── Cisco PSIRT API
+                 └── Cisco PSIRT API (Designed to check info regarding CVE only, other info regarding versions could use Web search tool instead)
 ```
 
 ## Stack
