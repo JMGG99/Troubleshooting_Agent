@@ -1,0 +1,8 @@
+TSAIvenv/
+__pycache__/
+*.db
+*.db-shm
+*.db-wal
+.env
+vectorstore/
+*.png
