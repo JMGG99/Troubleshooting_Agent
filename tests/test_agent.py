@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
-from main import app
-from rag import get_retriever
-from tools import search_cisco_docs
+from app.main import app
+from app.rag import get_retriever
+from app.tools import search_cisco_docs
 
 client = TestClient(app)
 

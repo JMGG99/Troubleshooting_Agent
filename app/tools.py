@@ -1,6 +1,6 @@
 from langchain_core.tools import tool
 from langchain_community.tools import DuckDuckGoSearchRun
-from rag import get_retriever
+from app.rag import get_retriever
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 import requests, os

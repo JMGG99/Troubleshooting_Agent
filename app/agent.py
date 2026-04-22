@@ -5,13 +5,14 @@ from langgraph.checkpoint.memory import MemorySaver
 from dotenv import load_dotenv
 from langchain.messages import ToolMessage 
 from typing import Literal
-from tools import search_cisco_vuln, search_web
-from sub_agents import run_bgp_agent, run_upgrade_agent
+from app.tools import search_cisco_vuln, search_web
+from app.sub_agents import run_bgp_agent, run_upgrade_agent
 from langgraph.checkpoint.sqlite import SqliteSaver
+from pathlib import Path
 import os, sqlite3
 
 #Loading my keys
-load_dotenv(".env")
+load_dotenv()
 anthropic_key = os.getenv("ANTHROPIC_API_KEY")
 langsmith_key = os.getenv("LANGSMITH_API_KEY")
 
@@ -85,7 +86,9 @@ agent_builder.add_conditional_edges(
 )
 agent_builder.add_edge("tool_node", "llm_node")
 
-conn = sqlite3.connect("agent_memory.db", check_same_thread=False)
+MEMORY_BASE_DIR = Path(__file__).resolve().parent.parent
+DB_PATH = str(MEMORY_BASE_DIR / "data" / "memory.db")
+conn = sqlite3.connect(DB_PATH, check_same_thread=False)
 memory = SqliteSaver(conn)
 agent = agent_builder.compile(checkpointer=memory)
 

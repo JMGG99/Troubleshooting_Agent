@@ -1,9 +1,14 @@
 from langchain_anthropic import ChatAnthropic
 from langchain.agents import create_agent
-from tools import search_web, search_cisco_docs
+from app.tools import search_web, search_cisco_docs
 from dotenv import load_dotenv
 from langchain_core.tools import tool
 import os
+
+#Loading my keys
+load_dotenv()
+anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+langsmith_key = os.getenv("LANGSMITH_API_KEY")
 
 agent_model = ChatAnthropic(
     model="claude-haiku-4-5",

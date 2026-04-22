@@ -4,12 +4,12 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
-
+from pathlib import Path
 
 load_dotenv(".env")
 
-DOCS_PATH = "docs"
-VECTORSTORE_PATH = "vectorstore"
+DOCS_PATH = Path(__file__).resolve().parent.parent / "data/docs"
+VECTORSTORE_PATH = Path(__file__).resolve().parent.parent / "data/vectorstore"
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 _retriever = None
 embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)

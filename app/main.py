@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from agent import chat
+from app.agent import chat
 from pydantic import BaseModel
 import uuid
 
