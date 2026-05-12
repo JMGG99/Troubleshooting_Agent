@@ -79,6 +79,12 @@ Because Cisco PDFs contain useful domain knowledge that the model should not hav
 
 Because this is a V1 prototype and SQLite keeps session memory simple, local, and persistent without adding the complexity of a full database server.
 
+## Deployment
+This project has been deployed on AWS EC2 using Docker and served via FASTAPI/Uvicorn. The repository includes a Dockerfile for local or cloud deployment.
+Build and run with Docker:
+docker build -t troubleshooting-agent .
+docker run -p 8000:8000 --env-file .env troubleshooting-agent
+
 ## Notes
 
 This project is intended as a practical portfolio prototype. Before using Cisco-related content or API integrations in production, it is recommended to review Cisco’s applicable legal terms, licenses, and usage policies.
